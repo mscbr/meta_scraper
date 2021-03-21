@@ -22,11 +22,10 @@ app.use("/", router);
 app.post("/get-preview", async (req, res, next) => {
   const { previewUrl } = req.body;
 
-  const resp = await fetch(previewUrl);
-  if (!resp) {
-    res.status(500).json({ message: "An internal error occurred!" });
-    return next();
-  }
+  const resp = await fetch(previewUrl).catch(error => {
+    res.status(500).json({ message: "Your URL is probably INVALID" });
+  });
+  if (!resp) return next();
 
   const html = await resp.text();
   const $ = cheerio.load(html);
