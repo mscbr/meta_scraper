@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meta_scraper</title>
+    <style>
+      body {
+        background-color: rgb(49, 70, 73);
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      #main-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        background-color: antiquewhite;
+        width: 55%;
+        margin: 0 auto;
+        padding: 48px;
+        border: 1px solid salmon;
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main-wrapper">
+      <div>
+        <form>
+          <input />
+          <button id="meta-submit" type="submit" disabled>GET META</button>
+        </form>
+      </div>
+      <div id="data-display"></div>
+    </div>
+    <script>
+      const dataDisplay = document.getElementById("data-display");
+      console.log(dataDisplay);
+      dataDisplay.innerHTML = "<p> H E N L O </p>";
+    </script>
+  </body>
+</html>
