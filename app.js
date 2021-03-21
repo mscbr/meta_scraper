@@ -45,7 +45,7 @@ app.post("/get-preview", async (req, res, next) => {
     url: previewUrl,
     domain: url.parse(previewUrl).hostname,
     title: getMetaTag("title") || $(`h1`).text(),
-    img: getMetaTag("image") || "./images/no-image.png",
+    img: getMetaTag("image") || "No image available",
     description:
       getMetaTag("description") || $(`p`).text() || "No description available"
   };
