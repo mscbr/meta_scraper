@@ -16,11 +16,21 @@
         align-items: center;
         justify-content: flex-start;
         background-color: antiquewhite;
-        width: 55%;
-        margin: 0 auto;
-        padding: 48px;
-        border: 1px solid salmon;
+        width: 70%;
+        margin: 15% auto;
+        padding: 24px;
+        border: 5px solid salmon;
         border-radius: 8px;
+      }
+      #data-display {
+        box-sizing: border-box;
+        margin-top: 40px;
+        min-height: 40vh;
+        max-width: 90%;
+        line-break: anywhere;
+      }
+      #meta-submit {
+        cursor: pointer;
       }
     </style>
   </head>
@@ -28,16 +38,62 @@
     <div id="main-wrapper">
       <div>
         <form>
-          <input />
-          <button id="meta-submit" type="submit" disabled>GET META</button>
+          <input id="url-input" type="text" placeholder="Enter URL" />
+          <button id="meta-submit" type="submit">GET META</button>
         </form>
       </div>
       <div id="data-display"></div>
     </div>
     <script>
+      let url = "";
+      const loadingTitle = "LOADING...";
+      let loadingTitleCounter = 0;
+
       const dataDisplay = document.getElementById("data-display");
-      console.log(dataDisplay);
-      dataDisplay.innerHTML = "<p> H E N L O </p>";
+      const urlInput = document.getElementById("url-input");
+      const submitBtn = document.getElementById("meta-submit");
+
+      urlInput.addEventListener("input", e => {
+        url = e.target.value;
+      });
+      submitBtn.addEventListener("click", e => {
+        e.preventDefault();
+        if (!url) return (dataDisplay.textContent = "No URL was provided!");
+
+        const loadingMeta = window.setInterval(() => {
+          dataDisplay.textContent = loadingTitle.slice(0, loadingTitleCounter);
+          loadingTitleCounter =
+            loadingTitleCounter < loadingTitle.length
+              ? ++loadingTitleCounter
+              : 0;
+        }, 100);
+
+        fetch("/get-preview", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ previewUrl: url })
+        })
+          .then(res => {
+            clearInterval(loadingMeta);
+            if (res.status === 500) throw Error(res);
+            return res.json();
+          })
+          .then(function (data) {
+            console.log("Request succeeded with JSON response", data);
+            dataDisplay.textContent = "";
+            dataDisplay.innerHTML = Object.keys(data)
+              .map(key => {
+                return `<div><b>${key}:</b> ${data[key]}</div>`;
+              })
+              .join("<br />");
+          })
+          .catch(function () {
+            dataDisplay.textContent = "Your request has failed. Check the URL";
+          });
+      });
     </script>
   </body>
 </html>
